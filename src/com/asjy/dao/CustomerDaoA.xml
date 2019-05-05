@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.asjy.dao.CustomerDaoA"><!-- namespace命名空间 -->
+	
+	<insert id="insertCustomer" parameterType="com.asjy.model.Customer"><!-- 负责代理添加功能 -->
+		<!-- id映射抽象方法名    parameterType对应抽象方法的参数类型-->
+		insert into tbl_customer values(#{id},#{name},#{points},#{tel},#{sex})
+	</insert>
+	
+	<update id="updateCustomer" parameterType="com.asjy.model.Customer">
+	<!-- 负责执行代理修改功能 -->
+		update tbl_customer set customer_name=#{name},
+								customer_points=#{points},
+								customer_tel=#{tel},
+								customer_sex=#{sex} 
+								where customer_id=#{id}
+	</update>
+	
+	<delete id="deleteCustomer" parameterType="int">
+	<!-- 负责执行代理删除功能 -->
+		delete from tbl_customer where customer_id = #{value}
+	</delete>
+	
+	<select id="findCustomer" resultType="com.asjy.model.Customer">
+	<!-- 执行代理全查询 -->
+		select 
+			customer_id id,
+			customer_name name,
+			customer_points points,
+			customer_tel tel,
+			customer_sex sex
+		from tbl_customer
+	</select>
+	
+	<select id="findCustomerByIdAndTel" parameterType="String" resultType="com.asjy.model.Customer">
+		
+		select 
+			customer_id id,
+			customer_name name,
+			customer_points points,
+			customer_tel tel,
+			customer_sex sex
+		from tbl_customer
+			where customer_id like "%"#{id}"%"
+			and customer_tel like  "%"#{tel}"%"
+	</select>
+	
+	<!--  <select id="findCustomerByIdAndTel" parameterType="String" resultType="com.asjy.model.Customer">
+		<bind name="patternId" value="'%' + id + '%'"/>
+		<bind name="patternTel" value="'%' + tel + '%'"/> 
+		select 
+			customer_id id,
+			customer_name name,
+			customer_points points,
+			customer_tel tel,
+			customer_sex sex
+		from tbl_customer
+			where customer_id like #{patternId}
+			and customer_tel like #{patternTel}
+	</select>-->
+</mapper>
